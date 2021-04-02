@@ -27,12 +27,10 @@ Take a look [here, H.F.M repositories](https://github.com/hfmrow/) for other use
 
 ## Some pictures
 
-**Main window.**  
-![](/media/syndicate/storage/Documents/dev/go/src/github.com/hfmrow/hash-me/assets/readme/main.jpg)  
+**Main window.** 
+![loading-ag-640](assets/readme/main.jpg)
 
-###### Cli version
-
-![](/media/syndicate/storage/Documents/dev/go/src/github.com/hfmrow/hash-me/assets/readme/cli.jpg)
+###### Cli version![](assets/readme/cli.jpg)
 
 ## How to compile
 
