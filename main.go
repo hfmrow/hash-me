@@ -33,7 +33,7 @@ import (
 //   Be aware to update assets via "Goh" and translations with "Got" before all.
 func main() {
 
-	devMode = false
+	devMode = true
 	absoluteRealPath, optFilename = getAbsRealPath()
 
 	// Initialization of assets according to the chosen mode (devMode).
