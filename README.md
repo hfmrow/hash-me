@@ -6,7 +6,7 @@
 
 Take a look [here, H.F.M repositories](https://github.com/hfmrow/) for other useful linux softwares.
 
-- If you just want to use it, simply download the '*.deb' compiled version under the "release" tab.
+- If you just want to use it, simply download the '*.deb' compiled version under the [releases](https://github.com/hfmrow/hash-me/releases) tab.
 
 - If you want to play inside code, see below "How to compile" section.
 
