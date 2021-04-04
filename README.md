@@ -28,13 +28,11 @@ Take a look [here, H.F.M repositories](https://github.com/hfmrow/) for other use
 ## Some pictures
 
 **Main window.** 
-![loading-ag-640](assets/readme/main.jpg)
+![](assets/readme/main.jpg)
 
 ###### Cli version![](assets/readme/cli.jpg)
 
 ## How to compile
-
-- 
 
 - Open terminal window and at command prompt, type: `go get github.com/hfmrow/hash-me`
 
@@ -46,15 +44,19 @@ Take a look [here, H.F.M repositories](https://github.com/hfmrow/) for other use
 
 - To Produce a stand-alone executable, you must change inside "main.go" file:
   
-        func main() {
-            devMode = true
-        ...
+  ```go
+    func main() {
+        devMode = true
+    ...
+  ```
   
   into
   
-        func main() {
-            devMode = false
-        ...
+  ```go
+    func main() {
+        devMode = false
+    ...
+  ```
 
 This operation indicate that externals data (Image/Icons) must be embedded into the executable file.
 
