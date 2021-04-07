@@ -683,6 +683,7 @@ func (tvs *TreeViewStructure) GetColValue(iter *gtk.TreeIter, col int) (value in
 	var err error
 	if gValue, err = tvs.Model.GetValue(iter, col); err == nil {
 		if value, err = gValue.GoValue(); err == nil {
+			gValue.Unset() /* untested */
 			return
 		}
 	}
@@ -703,12 +704,14 @@ func (tvs *TreeViewStructure) GetColValue(iter *gtk.TreeIter, col int) (value in
 // 	case *gtk.ListStore:
 // 		if oldVal, err = tvs.ListStore.GetValue(iter, col); err == nil {
 // 			if oldValue, err = oldVal.GoValue(); err == nil {
+// 				oldVal.Unset()
 // 				err = tvs.ListStore.SetValue(iter, col, value)
 // 			}
 // 		}
 // 	case *gtk.TreeStore:
 // 		if oldVal, err = tvs.TreeStore.GetValue(iter, col); err == nil {
 // 			if oldValue, err = oldVal.GoValue(); err == nil {
+// 				oldVal.Unset()
 // 				err = tvs.TreeStore.SetValue(iter, col, value)
 // 			}
 // 		}
@@ -910,6 +913,7 @@ func (tvs *TreeViewStructure) DuplicateRow(inIter, parent *gtk.TreeIter) (iter *
 		for colIdx, _ := range tvs.Columns {
 			if glibValue, err = tvs.ListStore.GetValue(inIter, colIdx); err == nil {
 				if goValue, err = glibValue.GoValue(); err == nil {
+					glibValue.Unset()
 					err = tvs.ListStore.SetValue(iter, colIdx, goValue)
 				}
 			}
@@ -919,6 +923,7 @@ func (tvs *TreeViewStructure) DuplicateRow(inIter, parent *gtk.TreeIter) (iter *
 		for colIdx, _ := range tvs.Columns {
 			if glibValue, err = tvs.TreeStore.GetValue(inIter, colIdx); err == nil {
 				if goValue, err = glibValue.GoValue(); err == nil {
+					glibValue.Unset()
 					err = tvs.TreeStore.SetValue(iter, colIdx, goValue)
 				}
 			}
@@ -956,14 +961,14 @@ func (tvs *TreeViewStructure) RemoveRows(iters ...*gtk.TreeIter) (count int) {
 
 	switch tvs.StoreType.(type) {
 	case *gtk.ListStore:
-		for _, iter := range iters {
-			if tvs.ListStore.Remove(iter) {
+		for i := len(iters) - 1; i >= 0; i-- {
+			if tvs.ListStore.Remove(iters[i]) {
 				count++
 			}
 		}
 	case *gtk.TreeStore:
-		for _, iter := range iters {
-			if tvs.TreeStore.Remove(iter) {
+		for i := len(iters) - 1; i >= 0; i-- {
+			if tvs.TreeStore.Remove(iters[i]) {
 				count++
 			}
 		}
@@ -1033,6 +1038,7 @@ func (tvs *TreeViewStructure) GetRow(iter *gtk.TreeIter) (outSlice []string, err
 	for colIdx := 0; colIdx < len(tvs.Columns); colIdx++ {
 		if glibValue, err = tvs.Model.GetValue(iter, colIdx); err == nil {
 			if valueString, err = tvs.getStringCellValueByType(glibValue); err == nil {
+				glibValue.Unset()
 				outSlice = append(outSlice, valueString)
 			}
 		}
@@ -1051,6 +1057,7 @@ func (tvs *TreeViewStructure) GetRowIface(iter *gtk.TreeIter) (outIface []interf
 	for colIdx := 0; colIdx < len(tvs.Columns); colIdx++ {
 		if glibValue, err = tvs.Model.GetValue(iter, colIdx); err == nil {
 			if value, err = glibValue.GoValue(); err == nil {
+				glibValue.Unset()
 				outIface = append(outIface, value)
 			}
 		}

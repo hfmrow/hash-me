@@ -10,7 +10,7 @@
       <placeholder/>
     </child>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox" id="BoxMain">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_left">2</property>
@@ -95,7 +95,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid">
+              <object class="GtkGrid" id="GridOptions">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
@@ -138,19 +138,6 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_left">4</property>
-                    <property name="margin_right">4</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -259,19 +246,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="CheckbuttonCreateFile">
-                    <property name="label" translatable="yes">Create file</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkCheckButton" id="CheckbuttonAddReminder">
                     <property name="label" translatable="yes">Add OS reminder</property>
                     <property name="visible">True</property>
@@ -282,19 +256,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_left">4</property>
-                    <property name="margin_right">4</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -346,19 +307,6 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="CheckbuttonUseDecimal">
-                    <property name="label" translatable="yes">Use decimal (size)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
                     <property name="top_attach">4</property>
                   </packing>
                 </child>
@@ -508,6 +456,58 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="CheckbuttonConcurrentOp">
+                    <property name="label" translatable="yes">Concurrent operations</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="CheckbuttonUseDecimal">
+                    <property name="label" translatable="yes">Use decimal (size)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="CheckbuttonRecursiveScan">
+                    <property name="label" translatable="yes">Recursive scan</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="CheckbuttonCreateFile">
+                    <property name="label" translatable="yes">Make output file(s)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">5</property>
                   </packing>
                 </child>

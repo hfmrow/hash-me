@@ -1,11 +1,11 @@
 // gohFunc.go
 
 /*
-	Source file auto-generated on Fri, 02 Apr 2021 17:02:29 using Gotk3 Objects Handler v1.7.5 ©2018-21 hfmrow
+	Source file auto-generated on Tue, 06 Apr 2021 22:04:43 using Gotk3 Objects Handler v1.7.5 ©2018-21 hfmrow
 	This software use gotk3 that is licensed under the ISC License:
 	https://github.com/gotk3/gotk3/blob/master/LICENSE
 
-	Copyright ©2020-21 hfmrow - Hash Me v1.1 github.com/hfmrow/hash-me
+	Copyright ©2020-21 hfmrow - Hash Me v1.2 github.com/hfmrow/hash-me
 	This program comes with absolutely no warranty. See the The MIT License (MIT) for details:
 	https://opensource.org/licenses/mit-license.php
 */

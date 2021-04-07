@@ -1,8 +1,8 @@
 {
 	"ProgInfos": {
 		"Name": "Hash Me",
-		"Version": "v1.0",
-		"Creat": "H.F.M",
+		"Version": "v1.2",
+		"Creat": "hfmrow",
 		"MainObjStructName": "mainObjects",
 		"GladeXmlFilename": "assets/glade/main.glade",
 		"TranslateFilename": "translate.go",
@@ -14,7 +14,7 @@
 		"LangNameShrt": "eng",
 		"Author": "H.F.M",
 		"Date": "Mon, 21 Dec 2020 04:38:16",
-		"Updated": "Mon, 21 Dec 2020 18:50:52",
+		"Updated": "Wed, 07 Apr 2021 17:49:30",
 		"Contributors": [
 			""
 		]
@@ -25,7 +25,7 @@
 		"SkipEmptyName": true,
 		"DoBackup": true
 	},
-	"ObjectsCount": 28,
+	"ObjectsCount": 33,
 	"Objects": [
 		{
 			"Class": "GtkCheckButton",
@@ -94,9 +94,9 @@
 		},
 		{
 			"Class": "GtkCheckButton",
-			"Id": "CheckbuttonCreateFile",
-			"Label": "Create file(s)",
-			"Tooltip": "\u003cspan foreground=\"#204A87FF\"\u003eCreate a file holding hash informations for each given file.\u003c/span\u003e",
+			"Id": "CheckbuttonConcurrentOp",
+			"Label": "Concurrent operations",
+			"Tooltip": "\u003cspan foreground=\"#204A87FF\"\u003eFiles are processed simultaneously (one file per thread).\u003c/span\u003e",
 			"Text": "",
 			"Uri": "",
 			"Comment": "",
@@ -104,6 +104,19 @@
 			"LabelWrap": false,
 			"TooltipMarkup": true,
 			"Idx": 5
+		},
+		{
+			"Class": "GtkCheckButton",
+			"Id": "CheckbuttonCreateFile",
+			"Label": "Make output file(s)",
+			"Tooltip": "\u003cspan foreground=\"#204A87FF\"\u003eCreate '.SUM' text file for each given file. If disabled, displayed\ninformations will only be copied to clipboard.\u003c/span\u003e",
+			"Text": "",
+			"Uri": "",
+			"Comment": "",
+			"LabelMarkup": false,
+			"LabelWrap": false,
+			"TooltipMarkup": true,
+			"Idx": 6
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -116,7 +129,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 6
+			"Idx": 7
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -129,7 +142,20 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 7
+			"Idx": 8
+		},
+		{
+			"Class": "GtkCheckButton",
+			"Id": "CheckbuttonRecursiveScan",
+			"Label": "Recursive scan",
+			"Tooltip": "\u003cspan foreground=\"#204A87FF\"\u003eRetrieve all selected files, directories and sub-dir.\u003c/span\u003e\n",
+			"Text": "",
+			"Uri": "",
+			"Comment": "",
+			"LabelMarkup": false,
+			"LabelWrap": false,
+			"TooltipMarkup": true,
+			"Idx": 9
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -142,7 +168,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 8
+			"Idx": 10
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -155,7 +181,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 9
+			"Idx": 11
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -168,7 +194,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 10
+			"Idx": 12
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -181,7 +207,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 11
+			"Idx": 13
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -194,7 +220,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 12
+			"Idx": 14
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -207,7 +233,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 13
+			"Idx": 15
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -220,7 +246,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 14
+			"Idx": 16
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -233,7 +259,20 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 15
+			"Idx": 17
+		},
+		{
+			"Class": "GtkCheckButton",
+			"Id": "CheckbuttonShowSplash",
+			"Label": "Show splash screen",
+			"Tooltip": "\u003cspan foreground=\"#204A87FF\"\u003eDisplay or not splash screen at start.\u003c/span\u003e",
+			"Text": "",
+			"Uri": "",
+			"Comment": "",
+			"LabelMarkup": false,
+			"LabelWrap": false,
+			"TooltipMarkup": true,
+			"Idx": 18
 		},
 		{
 			"Class": "GtkCheckButton",
@@ -246,7 +285,20 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 16
+			"Idx": 19
+		},
+		{
+			"Class": "GtkImage",
+			"Id": "ImageAppIcon",
+			"Label": "",
+			"Tooltip": "",
+			"Text": "",
+			"Uri": "",
+			"Comment": "",
+			"LabelMarkup": false,
+			"LabelWrap": false,
+			"TooltipMarkup": false,
+			"Idx": 20
 		},
 		{
 			"Class": "GtkLabel",
@@ -259,7 +311,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 17
+			"Idx": 21
 		},
 		{
 			"Class": "GtkLabel",
@@ -272,7 +324,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 18
+			"Idx": 22
 		},
 		{
 			"Class": "GtkLabel",
@@ -285,7 +337,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 19
+			"Idx": 23
 		},
 		{
 			"Class": "GtkLabel",
@@ -298,7 +350,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 20
+			"Idx": 24
 		},
 		{
 			"Class": "GtkButton",
@@ -311,7 +363,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 21
+			"Idx": 25
 		},
 		{
 			"Class": "GtkButton",
@@ -324,7 +376,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 22
+			"Idx": 26
 		},
 		{
 			"Class": "GtkStatusbar",
@@ -337,11 +389,11 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 23
+			"Idx": 27
 		},
 		{
-			"Class": "GtkSwitch",
-			"Id": "SwitchExpand",
+			"Class": "GtkScrolledWindow",
+			"Id": "ScrolledWindowTextViewDisplay",
 			"Label": "",
 			"Tooltip": "",
 			"Text": "",
@@ -350,7 +402,20 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 24
+			"Idx": 28
+		},
+		{
+			"Class": "GtkSwitch",
+			"Id": "SwitchExpand",
+			"Label": "",
+			"Tooltip": "\u003cspan foreground=\"#204A87FF\"\u003eExpand all.\u003c/span\u003e",
+			"Text": "",
+			"Uri": "",
+			"Comment": "",
+			"LabelMarkup": false,
+			"LabelWrap": false,
+			"TooltipMarkup": true,
+			"Idx": 29
 		},
 		{
 			"Class": "GtkSwitch",
@@ -363,7 +428,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": true,
-			"Idx": 25
+			"Idx": 30
 		},
 		{
 			"Class": "GtkTextView",
@@ -376,7 +441,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 26
+			"Idx": 31
 		},
 		{
 			"Class": "GtkTreeView",
@@ -389,7 +454,7 @@
 			"LabelMarkup": false,
 			"LabelWrap": false,
 			"TooltipMarkup": false,
-			"Idx": 27
+			"Idx": 32
 		}
 	],
 	"Sentences": {

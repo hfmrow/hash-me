@@ -1,11 +1,11 @@
 // gohObjects.go
 
 /*
-	Source file auto-generated on Fri, 02 Apr 2021 17:02:29 using Gotk3 Objects Handler v1.7.5 ©2018-21 hfmrow
+	Source file auto-generated on Tue, 06 Apr 2021 22:04:43 using Gotk3 Objects Handler v1.7.5 ©2018-21 hfmrow
 	This software use gotk3 that is licensed under the ISC License:
 	https://github.com/gotk3/gotk3/blob/master/LICENSE
 
-	Copyright ©2020-21 hfmrow - Hash Me v1.1 github.com/hfmrow/hash-me
+	Copyright ©2020-21 hfmrow - Hash Me v1.2 github.com/hfmrow/hash-me
 	This program comes with absolutely no warranty. See the The MIT License (MIT) for details:
 	https://opensource.org/licenses/mit-license.php
 */
@@ -25,14 +25,17 @@ var mainObjects *MainControlsObj
 /* declarations (gotk3 objects only) here.           */
 /****************************************************/
 type MainControlsObj struct {
+	BoxMain                       *gtk.Box
 	CheckbuttonAddReminder        *gtk.CheckButton
 	CheckbuttonAppendFiles        *gtk.CheckButton
 	CheckbuttonBlake2b256         *gtk.CheckButton
 	CheckbuttonBlake2b384         *gtk.CheckButton
 	CheckbuttonBlake2b512         *gtk.CheckButton
+	CheckbuttonConcurrentOp       *gtk.CheckButton
 	CheckbuttonCreateFile         *gtk.CheckButton
 	CheckbuttonMd4                *gtk.CheckButton
 	CheckbuttonMd5                *gtk.CheckButton
+	CheckbuttonRecursiveScan      *gtk.CheckButton
 	CheckbuttonSha1               *gtk.CheckButton
 	CheckbuttonSha256             *gtk.CheckButton
 	CheckbuttonSha384             *gtk.CheckButton
@@ -46,6 +49,7 @@ type MainControlsObj struct {
 	EventBoxAppIcon               *gtk.EventBox
 	EventBoxMinimize              *gtk.EventBox
 	EventBoxResize                *gtk.EventBox
+	GridOptions                   *gtk.Grid
 	ImageAppIcon                  *gtk.Image
 	LabelMethods                  *gtk.Label
 	LabelOptions                  *gtk.Label
@@ -71,14 +75,17 @@ type MainControlsObj struct {
 /* objects names (below first declaration).                   */
 /*************************************************************/
 func gladeObjParser() {
+	mainObjects.BoxMain = loadObject("BoxMain").(*gtk.Box)
 	mainObjects.CheckbuttonAddReminder = loadObject("CheckbuttonAddReminder").(*gtk.CheckButton)
 	mainObjects.CheckbuttonAppendFiles = loadObject("CheckbuttonAppendFiles").(*gtk.CheckButton)
 	mainObjects.CheckbuttonBlake2b256 = loadObject("CheckbuttonBlake2b256").(*gtk.CheckButton)
 	mainObjects.CheckbuttonBlake2b384 = loadObject("CheckbuttonBlake2b384").(*gtk.CheckButton)
 	mainObjects.CheckbuttonBlake2b512 = loadObject("CheckbuttonBlake2b512").(*gtk.CheckButton)
+	mainObjects.CheckbuttonConcurrentOp = loadObject("CheckbuttonConcurrentOp").(*gtk.CheckButton)
 	mainObjects.CheckbuttonCreateFile = loadObject("CheckbuttonCreateFile").(*gtk.CheckButton)
 	mainObjects.CheckbuttonMd4 = loadObject("CheckbuttonMd4").(*gtk.CheckButton)
 	mainObjects.CheckbuttonMd5 = loadObject("CheckbuttonMd5").(*gtk.CheckButton)
+	mainObjects.CheckbuttonRecursiveScan = loadObject("CheckbuttonRecursiveScan").(*gtk.CheckButton)
 	mainObjects.CheckbuttonSha1 = loadObject("CheckbuttonSha1").(*gtk.CheckButton)
 	mainObjects.CheckbuttonSha256 = loadObject("CheckbuttonSha256").(*gtk.CheckButton)
 	mainObjects.CheckbuttonSha384 = loadObject("CheckbuttonSha384").(*gtk.CheckButton)
@@ -92,6 +99,7 @@ func gladeObjParser() {
 	mainObjects.EventBoxAppIcon = loadObject("EventBoxAppIcon").(*gtk.EventBox)
 	mainObjects.EventBoxMinimize = loadObject("EventBoxMinimize").(*gtk.EventBox)
 	mainObjects.EventBoxResize = loadObject("EventBoxResize").(*gtk.EventBox)
+	mainObjects.GridOptions = loadObject("GridOptions").(*gtk.Grid)
 	mainObjects.ImageAppIcon = loadObject("ImageAppIcon").(*gtk.Image)
 	mainObjects.LabelMethods = loadObject("LabelMethods").(*gtk.Label)
 	mainObjects.LabelOptions = loadObject("LabelOptions").(*gtk.Label)

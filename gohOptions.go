@@ -1,11 +1,11 @@
 // gohOptions.go
 
 /*
-	Source file auto-generated on Fri, 02 Apr 2021 17:02:29 using Gotk3 Objects Handler v1.7.5 ©2018-21 hfmrow
+	Source file auto-generated on Tue, 06 Apr 2021 22:04:43 using Gotk3 Objects Handler v1.7.5 ©2018-21 hfmrow
 	This software use gotk3 that is licensed under the ISC License:
 	https://github.com/gotk3/gotk3/blob/master/LICENSE
 
-	Copyright ©2020-21 hfmrow - Hash Me v1.1 github.com/hfmrow/hash-me
+	Copyright ©2020-21 hfmrow - Hash Me v1.2 github.com/hfmrow/hash-me
 	This program comes with absolutely no warranty. See the The MIT License (MIT) for details:
 	https://opensource.org/licenses/mit-license.php
 */
@@ -24,6 +24,7 @@ import (
 	glfssf "github.com/hfmrow/genLib/files/scanFileDir"
 	glss "github.com/hfmrow/genLib/slices"
 	glsg "github.com/hfmrow/genLib/strings"
+	gltscj "github.com/hfmrow/genLib/tools/concurrentJob"
 	gltsle "github.com/hfmrow/genLib/tools/log2file"
 	gltsushe "github.com/hfmrow/genLib/tools/units/human_readable"
 
@@ -38,7 +39,7 @@ import (
 // or respect strictly the original applied format.
 var (
 	Name         = "Hash Me"
-	Vers         = "v1.1"
+	Vers         = "v1.2"
 	Descr        = "Create hash checksum for given files, allow to create .SUM files corresponding to each file. Includes Md4, Md5, Sha1, Sha256, Sha384, Sha512, Sha3_256, Sha3_384, Sha3_512, Blake2b256, Blake2b384, Blake2b512 methods."
 	Creat        = "hfmrow"
 	YearCreat    = "2020-21"
@@ -85,10 +86,14 @@ var (
 	mainStatusbar         *gimc.StatusBar
 	StatusBarStructureNew = gimc.StatusBarStructureNew
 
+	// Concurrent job
+	ccs                    *gltscj.ConcurrentCalcStruc
+	ConcurrentCalcStrucNew = gltscj.ConcurrentCalcStrucNew
+
 	// Files
 	HumanReadableSize = gltsushe.HumanReadableSize
-	UNIT_DEFAULT      = gltsushe.UNIT_DEFAULT
-	UNIT_DECIMAL      = gltsushe.UNIT_DECIMAL
+	HR_UNIT_DEFAULT   = gltsushe.UNIT_DEFAULT
+	HR_UNIT_DECIMAL   = gltsushe.UNIT_DECIMAL
 	ExtEnsure         = glfs.ExtEnsure
 	HashMe            = glco.HashMe
 	GetOsLineEnd      = glsg.GetOsLineEnd
@@ -98,12 +103,19 @@ var (
 	IsExistSl = glss.IsExistSl
 
 	// Misc
-	files []string
+	files        []string
+	filesChanged bool
 
 	// TextView buffer
 	buff *gtk.TextBuffer
 
+	// Progressbar
+	pbs            *gimc.ProgressBarStruct
+	ProgressGifNew = gimc.ProgressGifNew
+
 	FormatText = glsg.FormatText
+
+	resultsHash []*entry
 )
 
 // MainOpt: This structure contains all the variables of the application, they
@@ -122,11 +134,13 @@ type MainOpt struct {
 	LanguageFilename string // In case where GOTranslate is used.
 
 	ShowSplash,
+	MakeOutputFile,
+	RecursiveScan,
+	ConcurrentOp,
 	ShowFilename,
 	AppendDroppedFiles,
 	UseDecimal,
 	Reminder,
-	SaveToFile,
 	Md4, Md5,
 	Sha1, Sha256, Sha384, Sha512,
 	Sha3_256, Sha3_384, Sha3_512,
@@ -136,8 +150,7 @@ type MainOpt struct {
 	CurrentStackPage string
 
 	SwitchStackPage,
-	SwitchExpandState,
-	SwitchExpandVisible bool
+	SwitchExpandState bool
 }
 
 // Init: Main options initialisation, Put here default values for your application.
@@ -151,7 +164,6 @@ func (opt *MainOpt) Init() {
 	opt.ShowSplash = true
 	opt.ShowFilename = true
 	opt.Reminder = true
-	opt.SaveToFile = true
 	opt.Md5 = true
 	// opt.Sha256 = true
 	opt.Sha512 = true
@@ -185,7 +197,6 @@ func (opt *MainOpt) UpdateObjects() {
 	// })
 
 	mainObjects.CheckbuttonAddReminder.SetActive(opt.Reminder)
-	mainObjects.CheckbuttonCreateFile.SetActive(opt.SaveToFile)
 	mainObjects.CheckbuttonMd4.SetActive(opt.Md4)
 	mainObjects.CheckbuttonMd5.SetActive(opt.Md5)
 	mainObjects.CheckbuttonSha1.SetActive(opt.Sha1)
@@ -201,26 +212,28 @@ func (opt *MainOpt) UpdateObjects() {
 	mainObjects.CheckbuttonShowFilename.SetActive(opt.ShowFilename)
 	mainObjects.CheckbuttonAppendFiles.SetActive(opt.AppendDroppedFiles)
 	mainObjects.CheckbuttonUseDecimal.SetActive(opt.UseDecimal)
+	mainObjects.CheckbuttonConcurrentOp.SetActive(opt.ConcurrentOp)
+	mainObjects.CheckbuttonRecursiveScan.SetActive(opt.RecursiveScan)
+	mainObjects.CheckbuttonCreateFile.SetActive(opt.MakeOutputFile)
 
 	if len(opt.CurrentStackPage) > 0 {
 		mainObjects.Stack.SetVisibleChildName(opt.CurrentStackPage)
 	}
 	mainObjects.SwitchTreeView.SetActive(opt.SwitchStackPage)
 	mainObjects.SwitchExpand.SetActive(opt.SwitchExpandState)
-	mainObjects.SwitchExpand.SetVisible(opt.SwitchExpandVisible)
+	SwitchExpandStateSet(mainObjects.SwitchExpand)
 
 	mainObjects.CheckbuttonShowSplash.SetActive(opt.ShowSplash)
 }
 
-// UpdateOptions: Objects -> Options. Put here the gtk3 objects whose values you want to
-// save in the options structure on exit.
+// UpdateOptions: Objects -> Options. Put here the gtk3 objects whose
+// values you want to save in the options structure on exit.
 func (opt *MainOpt) UpdateOptions() {
 
 	opt.MainWinWidth, opt.MainWinHeight = mainObjects.MainWindow.GetSize()
 	opt.MainWinPosX, opt.MainWinPosY = mainObjects.MainWindow.GetPosition()
 
 	opt.Reminder = mainObjects.CheckbuttonAddReminder.GetActive()
-	opt.SaveToFile = mainObjects.CheckbuttonCreateFile.GetActive()
 	opt.Md4 = mainObjects.CheckbuttonMd4.GetActive()
 	opt.Md5 = mainObjects.CheckbuttonMd5.GetActive()
 	opt.Sha1 = mainObjects.CheckbuttonSha1.GetActive()
@@ -236,11 +249,13 @@ func (opt *MainOpt) UpdateOptions() {
 	opt.ShowFilename = mainObjects.CheckbuttonShowFilename.GetActive()
 	opt.AppendDroppedFiles = mainObjects.CheckbuttonAppendFiles.GetActive()
 	opt.UseDecimal = mainObjects.CheckbuttonUseDecimal.GetActive()
+	opt.ConcurrentOp = mainObjects.CheckbuttonConcurrentOp.GetActive()
+	opt.RecursiveScan = mainObjects.CheckbuttonRecursiveScan.GetActive()
+	opt.MakeOutputFile = mainObjects.CheckbuttonCreateFile.GetActive()
 
 	opt.CurrentStackPage = mainObjects.Stack.GetVisibleChildName()
 	opt.SwitchStackPage = mainObjects.SwitchTreeView.GetActive()
 	opt.SwitchExpandState = mainObjects.SwitchExpand.GetActive()
-	opt.SwitchExpandVisible = mainObjects.SwitchExpand.GetVisible()
 
 	opt.ShowSplash = mainObjects.CheckbuttonShowSplash.GetActive()
 }

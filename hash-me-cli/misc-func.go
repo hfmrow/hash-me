@@ -48,6 +48,8 @@ func chkCmdLine() error {
 			opt.UseDecimal = true
 		case "-r", "--recursive":
 			depth = -1
+		case "-x", "--noosrem":
+			opt.AddReminder = false
 		case "-Md4":
 			opt.Md4 = true
 		case "-Md5":
@@ -106,7 +108,7 @@ func chkCmdLine() error {
 
 				opt.SaveToFile = false
 				opt.SUMSingleFile = true
-				opt.Output = os.Args[idx]
+				opt.OutputFilename = os.Args[idx]
 			} else {
 
 				idx--
@@ -147,9 +149,11 @@ usage:
 -r, --recursive	If a directory is given as input file (or dot), determine
 		whether	a recursive scan will be done or not, default NOT.
 
--n --noname	Disable filename display.
+-n, --noname	Disable filename display.
 
--d --decimal	Use decimal for file size calculation. (1000 instead of 1024)
+-d ,--decimal	Use decimal for file size calculation. (1000 instead of 1024).
+
+-x, --noosrem	Does not add OS. reminder in output file(s).
 
 [HASH-METHODS]
 
@@ -166,13 +170,13 @@ usage:
 	They're present here not for public distribution use but rather
 	for personal use on large files (e.g: comparison of .mkv).
 
-[INPUT-FILES]
+[INPUT/OUTPUT-FILES]
 
 -i, --input	Indicate that the following files should be considered to be
 		hashed.
 
 -o, --output	Specify the name of the file in which you want to place the
-		collected checksums. This replaces the "-sum" option, so you
+		collected checksums. This replaces the "--sum" option, so you
 		can only use one or the other.
 
 Example:

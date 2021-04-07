@@ -1,8 +1,8 @@
-# Hash Me
+# Hash Me (gui & cli versions)
 
 *Calculate the checksum using many methods for one or more files at a time. Save the results in a '.SUM' text file for each given file.*
 
-#### Last update 2021-04-02
+#### Last update 2021-04-08
 
 Take a look [here, H.F.M repositories](https://github.com/hfmrow/) for other useful linux softwares.
 
@@ -20,8 +20,9 @@ Take a look [here, H.F.M repositories](https://github.com/hfmrow/) for other use
 
 - Create hash checksum for given files, allow to create .SUM files corresponding to each file.
 - Includes Md4, Md5, Sha1, Sha256, Sha384, Sha512, Sha3_256, Sha3_384, Sha3_512, Blake2b256, Blake2b384, Blake2b512 methods.
-- Several previews available.
+- Several previews available (Tree or flat text display).
 - Multi-file management.
+- Concurrent files processing.
 - OS reminder for Mac, Window, Linux (how to control checksum).
 - Command line version available.
 
@@ -58,13 +59,13 @@ Take a look [here, H.F.M repositories](https://github.com/hfmrow/) for other use
     ...
   ```
 
-This operation indicate that externals data (Image/Icons) must be embedded into the executable file.
+This operation indicate that externals data (Image/Icons) must be embedded into the executable file and/or that the internal behavior will be modified to adapt to the production environment.
 
 ### Os informations (build with)
 
 | Name                                                       | Version / Info / Name                          |
 | ---------------------------------------------------------- | ---------------------------------------------- |
-| GOLANG                                                     | V1.16.2 -> GO111MODULE="off", GOPROXY="direct" |
+| GOLANG                                                     | V1.16.3 -> GO111MODULE="off", GOPROXY="direct" |
 | DISTRIB                                                    | LinuxMint Xfce                                 |
 | VERSION                                                    | 20                                             |
 | CODENAME                                                   | ulyana                                         |

@@ -9,7 +9,7 @@
 	],
 	"AppName": "Hash Me",
 	"AppCreator": "hfmrow",
-	"AppVers": "v1.1",
+	"AppVers": "v1.2",
 	"AppDescr": "",
 	"License": "",
 	"LicenseShort": "",
@@ -28,7 +28,7 @@
 	"GtkSourcePath": "\"github.com/hfmrow/gotk3_gtksource/source\"",
 	"GladeXmlFile": "",
 	"GladeXmlFileRel": "assets/glade/main.glade",
-	"GladeXmlFileCheckSum": "3e0565a9ce8c3b99f64b79253ebcfce2",
+	"GladeXmlFileCheckSum": "2c4fee143b64930924f9ba552f8a3df0",
 	"DefaultProjExt": "*.proj",
 	"BackupExt": [
 		"*.go",
@@ -96,10 +96,22 @@
 		"Images": false,
 		"License": false
 	},
-	"ObjectsCount": 36,
+	"ObjectsCount": 40,
 	"ObjectsAdded": 0,
 	"ObjectsRemoved": 0,
 	"ActualObjects": [
+		{
+			"ObjectType": "GtkBox",
+			"ObjectName": "BoxMain",
+			"LibPrefix": "gtk",
+			"Suffix": "",
+			"Prefix": "",
+			"Value": "",
+			"Commented": "",
+			"ManualyAdded": false,
+			"Unkowen": false,
+			"NewObject": false
+		},
 		{
 			"ObjectType": "GtkCheckButton",
 			"ObjectName": "CheckbuttonAddReminder",
@@ -162,6 +174,18 @@
 		},
 		{
 			"ObjectType": "GtkCheckButton",
+			"ObjectName": "CheckbuttonConcurrentOp",
+			"LibPrefix": "gtk",
+			"Suffix": "",
+			"Prefix": "",
+			"Value": "",
+			"Commented": "",
+			"ManualyAdded": false,
+			"Unkowen": false,
+			"NewObject": false
+		},
+		{
+			"ObjectType": "GtkCheckButton",
 			"ObjectName": "CheckbuttonCreateFile",
 			"LibPrefix": "gtk",
 			"Suffix": "",
@@ -187,6 +211,18 @@
 		{
 			"ObjectType": "GtkCheckButton",
 			"ObjectName": "CheckbuttonMd5",
+			"LibPrefix": "gtk",
+			"Suffix": "",
+			"Prefix": "",
+			"Value": "",
+			"Commented": "",
+			"ManualyAdded": false,
+			"Unkowen": false,
+			"NewObject": false
+		},
+		{
+			"ObjectType": "GtkCheckButton",
+			"ObjectName": "CheckbuttonRecursiveScan",
 			"LibPrefix": "gtk",
 			"Suffix": "",
 			"Prefix": "",
@@ -343,6 +379,18 @@
 		{
 			"ObjectType": "GtkEventBox",
 			"ObjectName": "EventBoxResize",
+			"LibPrefix": "gtk",
+			"Suffix": "",
+			"Prefix": "",
+			"Value": "",
+			"Commented": "",
+			"ManualyAdded": false,
+			"Unkowen": false,
+			"NewObject": false
+		},
+		{
+			"ObjectType": "GtkGrid",
+			"ObjectName": "GridOptions",
 			"LibPrefix": "gtk",
 			"Suffix": "",
 			"Prefix": "",
@@ -533,7 +581,7 @@
 			"NewObject": false
 		}
 	],
-	"VarFilesCount": 13,
+	"VarFilesCount": 4,
 	"VarFilesAdded": 0,
 	"VarFilesRemoved": 0,
 	"VarFilesList": [
@@ -547,27 +595,9 @@
 			"LineNb": -1
 		},
 		{
-			"RelRoot": "assets/images",
-			"VarName": "crossIcon48",
-			"FilenameRel": "assets/images/Cross-icon-48.png",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
 			"RelRoot": "assets/css",
 			"VarName": "custom",
 			"FilenameRel": "assets/css/custom.css",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
-			"RelRoot": "assets/images",
-			"VarName": "folder48",
-			"FilenameRel": "assets/images/folder-48.png",
 			"Suffix": "",
 			"Prefix": "",
 			"MainGladeVarNameMinimal": "",
@@ -586,69 +616,6 @@
 			"RelRoot": "assets/images",
 			"VarName": "linearProgressHorzBlue",
 			"FilenameRel": "assets/images/linear-progress-horz-blue.gif",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
-			"RelRoot": "assets/images",
-			"VarName": "logout48",
-			"FilenameRel": "assets/images/logout-48.png",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
-			"RelRoot": "assets/images",
-			"VarName": "minimizeico",
-			"FilenameRel": "assets/images/minimizeIco.png",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
-			"RelRoot": "assets/images",
-			"VarName": "options48",
-			"FilenameRel": "assets/images/Options-48.png",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
-			"RelRoot": "assets/images",
-			"VarName": "resizeico",
-			"FilenameRel": "assets/images/resizeIco.png",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
-			"RelRoot": "assets/images",
-			"VarName": "roottermico",
-			"FilenameRel": "assets/images/rootTermIco.png",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
-			"RelRoot": "assets/images",
-			"VarName": "stop48",
-			"FilenameRel": "assets/images/Stop-48.png",
-			"Suffix": "",
-			"Prefix": "",
-			"MainGladeVarNameMinimal": "",
-			"LineNb": -1
-		},
-		{
-			"RelRoot": "assets/images",
-			"VarName": "tickIcon48",
-			"FilenameRel": "assets/images/Tick-icon-48.png",
 			"Suffix": "",
 			"Prefix": "",
 			"MainGladeVarNameMinimal": "",

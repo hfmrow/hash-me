@@ -13,26 +13,22 @@
 package main
 
 import (
+	"time"
+
 	"github.com/gotk3/gotk3/gtk"
 )
 
+/*
+ * Checkbuttons / Switch
+ */
+func genericMethod(chk *gtk.CheckButton) {
+	filesChanged = true
+	toDisplay(true)
+	time.Sleep(time.Millisecond * 300)
+}
+
 func CheckbuttonShowSplashToggled(chk *gtk.CheckButton) {
 	mainOptions.ShowSplash = chk.GetActive()
-}
-
-func toDisplay() {
-	mainObjects.CheckbuttonAddReminder.SetActive(false)
-	mainObjects.CheckbuttonCreateFile.SetActive(false)
-
-	doIt(true)
-
-	mainObjects.CheckbuttonAddReminder.SetActive(mainOptions.Reminder)
-	mainObjects.CheckbuttonCreateFile.SetActive(mainOptions.SaveToFile)
-}
-
-func MainButtonDoneClicked() {
-
-	doIt(false)
 }
 
 func SwitchTreeViewStateSet(sw *gtk.Switch) {
@@ -48,9 +44,49 @@ func SwitchTreeViewStateSet(sw *gtk.Switch) {
 
 func SwitchExpandStateSet(sw *gtk.Switch) {
 
+	mainOptions.SwitchExpandState = sw.GetActive()
 	if sw.GetActive() {
 		tvs.TreeView.ExpandAll()
 	} else {
 		tvs.TreeView.CollapseAll()
 	}
+}
+
+/*
+ * Buttons
+ */
+func MainButtonDoneClicked() {
+
+	toDisplay(false)
+
+	// anim, err := GetPixBufAnimation(linearProgressHorzBlue)
+	// if err != nil {
+	// 	log.Fatalf("GetPixBufAnimation: %s\n", err.Error())
+	// }
+	// gifImage, err := gtk.ImageNewFromAnimation(anim)
+	// if err != nil {
+	// 	log.Fatalf("ImageNewFromAnimation: %s\n", err.Error())
+	// }
+	// pbs = ProgressGifNew(gifImage, mainObjects.BoxMain, 1,
+	// 	func() error {
+	// 		glib.IdleAdd(func() {
+	// 			mainObjects.MainButtonDone.SetSensitive(false)
+	// 			mainObjects.GridOptions.SetSensitive(false)
+	// 		})
+	// 		doIt(false)
+	// 		return nil
+	// 	},
+	// 	func() error {
+
+	// 		// toTreview(results)
+
+	// 		mainObjects.MainButtonDone.SetSensitive(true)
+	// 		mainObjects.GridOptions.SetSensitive(true)
+	// 		return nil
+	// 	})
+
+	// go func() {
+	// 	pbs.StartGif()
+	// }()
+
 }

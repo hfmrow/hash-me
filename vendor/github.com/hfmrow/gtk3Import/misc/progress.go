@@ -25,21 +25,23 @@ type ProgressBarStruct struct {
 	gifImage        *gtk.Image
 	box             *gtk.Box
 	boxPosition     int
-	fMain, fEnd     func() (err error)
+	fMain, fEnd     func() error
 	progressBar     *gtk.ProgressBar
 	TimeOutContinue bool
 	ticker          *time.Ticker
 }
 
-func ProgressBarNew(progressBar *gtk.ProgressBar, fMain, fEnd func() (err error)) (pbs *ProgressBarStruct) {
+func ProgressBarNew(progressBar *gtk.ProgressBar, fMain, fEnd func() error) (pbs *ProgressBarStruct) {
 	pbs = new(ProgressBarStruct)
-	pbs.Init(progressBar, fMain, fEnd)
+	pbs.RefreshMs = 100
+	pbs.progressBar = progressBar
+	pbs.Init(fMain, fEnd)
 	return
 }
 
-func ProgressGifNew(gifImage *gtk.Image, box *gtk.Box, position int, fMain, fEnd func() (err error)) (pbs *ProgressBarStruct) {
+func ProgressGifNew(gifImage *gtk.Image, box *gtk.Box, position int, fMain, fEnd func() error) (pbs *ProgressBarStruct) {
 	pbs = new(ProgressBarStruct)
-	pbs.Init(nil, fMain, fEnd)
+	pbs.Init(fMain, fEnd)
 	pbs.box = box
 	pbs.boxPosition = position
 	pbs.gifImage = gifImage
@@ -51,9 +53,7 @@ func ProgressGifNew(gifImage *gtk.Image, box *gtk.Box, position int, fMain, fEnd
 	return
 }
 
-func (pbs *ProgressBarStruct) Init(progressBar *gtk.ProgressBar, fMain, fEnd func() (err error)) {
-	pbs.RefreshMs = 100
-	pbs.progressBar = progressBar
+func (pbs *ProgressBarStruct) Init(fMain, fEnd func() error) {
 	pbs.fMain, pbs.fEnd = fMain, fEnd
 }
 
@@ -105,14 +105,16 @@ func (pbs *ProgressBarStruct) StartTicker() (err error) {
 	}
 	glib.IdleAdd(func() {
 		pbs.progressBar.SetFraction(0)
-		err = pbs.fEnd()
+		if pbs.fEnd != nil {
+			err = pbs.fEnd()
+		}
 		pbs.ticker.Stop()
 	})
 
 	return
 }
 
-func (pbs *ProgressBarStruct) StartTimeOut() {
+func (pbs *ProgressBarStruct) StartTimeOut() (err error) {
 
 	pbs.TimeOutContinue = true
 	glib.TimeoutAdd(pbs.RefreshMs, func() bool {
@@ -124,7 +126,9 @@ func (pbs *ProgressBarStruct) StartTimeOut() {
 		} else {
 			glib.IdleAdd(func() {
 				pbs.progressBar.SetFraction(0)
-				pbs.fEnd()
+				if pbs.fEnd != nil {
+					err = pbs.fEnd()
+				}
 			})
 			return false
 		}

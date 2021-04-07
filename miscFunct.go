@@ -15,134 +15,197 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
+	"runtime"
+	"sort"
 	"strings"
 
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gdk"
+	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
 
-// updateStatusbar:
-func updateStatusbar() {
-	mainStatusbar.CleanAll()
-	mainStatusbar.Set(fmt.Sprintf("%v", len(files)), 0)
+type entry struct {
+	base,
+	filename,
+	content string
+	outStr []string
+	size   int64
 }
 
 // makeHash:
-func makeHash(filename string) (outStr []string, err error) {
+func makeHash(filename string) (e *entry, err error) {
 
 	var (
-		fi   os.FileInfo
-		iter *gtk.TreeIter
+		fi        os.FileInfo
+		fileEntry = new(entry)
 	)
 
 	if fi, err = os.Stat(filename); err == nil {
 
-		HRopt := UNIT_DEFAULT
-		if mainObjects.CheckbuttonUseDecimal.GetActive() {
-			HRopt = UNIT_DECIMAL
-		}
-
-		fName := strings.Join([]string{"FILE:",
-			filepath.Base(filename), HumanReadableSize(float64(fi.Size()),
-				HRopt)}, "\t")
+		fileEntry.size = fi.Size()
+		fileEntry.base = filepath.Base(filename)
+		fileEntry.filename = filename
 
 		if mainObjects.CheckbuttonMd4.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"MD4:", HashMe(filename, "md4")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"MD4:", HashMe(filename, "md4")}, "\t"))
 		}
 		if mainObjects.CheckbuttonMd5.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"MD5:", HashMe(filename, "md5")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"MD5:", HashMe(filename, "md5")}, "\t"))
 		}
 		if mainObjects.CheckbuttonSha1.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"SHA1:", HashMe(filename, "sha1")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"SHA1:", HashMe(filename, "sha1")}, "\t"))
 		}
 
 		if mainObjects.CheckbuttonSha256.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"SHA256:", HashMe(filename, "sha256")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"SHA256:", HashMe(filename, "sha256")}, "\t"))
 		}
 		if mainObjects.CheckbuttonSha384.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"SHA384:", HashMe(filename, "sha384")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"SHA384:", HashMe(filename, "sha384")}, "\t"))
 		}
 		if mainObjects.CheckbuttonSha512.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"SHA512:", HashMe(filename, "sha512")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"SHA512:", HashMe(filename, "sha512")}, "\t"))
 		}
 
 		if mainObjects.CheckbuttonSha3_256.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"SHA3_256:", HashMe(filename, "sha3-256")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"SHA3_256:", HashMe(filename, "sha3-256")}, "\t"))
 		}
 		if mainObjects.CheckbuttonSha3_384.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"SHA3_384:", HashMe(filename, "sha3-384")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"SHA3_384:", HashMe(filename, "sha3-384")}, "\t"))
 		}
 		if mainObjects.CheckbuttonSha3_512.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"SHA3_512:", HashMe(filename, "sha3-512")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"SHA3_512:", HashMe(filename, "sha3-512")}, "\t"))
 		}
 
 		if mainObjects.CheckbuttonBlake2b256.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"BLAKE2b256:", HashMe(filename, "blake2b256")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"BLAKE2b256:", HashMe(filename, "blake2b256")}, "\t"))
 		}
 		if mainObjects.CheckbuttonBlake2b384.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"BLAKE2b384:", HashMe(filename, "blake2b384")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"BLAKE2b384:", HashMe(filename, "blake2b384")}, "\t"))
 		}
 		if mainObjects.CheckbuttonBlake2b512.GetActive() {
-			outStr = append(outStr, strings.Join([]string{"BLAKE2b512:", HashMe(filename, "blake2b512")}, "\t"))
+			fileEntry.outStr = append(fileEntry.outStr, strings.Join([]string{"BLAKE2b512:", HashMe(filename, "blake2b512")}, "\t"))
 		}
+	}
 
-		/* Display to TreeView */
-		if len(outStr) > 0 {
+	return fileEntry, err
+}
 
-			name := strings.Split(fName, "\t")[1:]
-			for _, row := range outStr {
+// toTreview: Display to TreeView
+func toTreview() {
 
+	var (
+		iter *gtk.TreeIter
+		err  error
+		name string
+	)
+
+	tvs.Clear()
+	tvs.StoreDetach()
+	defer tvs.StoreAttach()
+
+	for _, res := range resultsHash {
+		HRopt := HR_UNIT_DEFAULT
+		if mainObjects.CheckbuttonUseDecimal.GetActive() {
+			HRopt = HR_UNIT_DECIMAL
+		}
+		name = strings.Join([]string{res.base, HumanReadableSize(res.size, HRopt)}, "\t")
+
+		if len(res.outStr) > 0 {
+			for _, row := range res.outStr {
 				tmpRow := strings.Split(row, "\t")
 				// Convert to []interface
-				iSplitted := tvs.ColValuesStringSliceToIfaceSlice(strings.Join(name, " "), tmpRow[1])
-
+				iSplitted := tvs.ColValuesStringSliceToIfaceSlice(name, tmpRow[1])
 				if iter, err = tvs.AddTree(
-
 					colmap["chk"],
 					colmap["dat"],
 					false,
 					nil,
 					iSplitted...); err == nil && iter != nil {
-					// Add hash method
+					// Add names
 					err = tvs.SetColValue(iter, colmap["mtd"], tmpRow[0])
-					err = tvs.SetColValue(iter, colmap["fnm"], filename)
+					err = tvs.SetColValue(iter, colmap["fnm"], res.filename)
 				}
-			}
-
-			// Prepend filename if requested
-			if mainObjects.CheckbuttonShowFilename.GetActive() {
-				outStr = append([]string{fName}, outStr...)
-			}
-
-			// Add newline if there is something present (for further usage)
-			if len(outStr) > 0 {
-				outStr = append(outStr, GetOsLineEnd())
 			}
 		}
 	}
-	return
+}
+
+// toDisplay:
+func toDisplay(show bool) {
+
+	if !show {
+		doIt(show)
+		return
+	}
+
+	// var results []*entry
+	anim, err := GetPixBufAnimation(linearProgressHorzBlue)
+	if err != nil {
+		log.Fatalf("GetPixBufAnimation: %s\n", err.Error())
+	}
+	gifImage, err := gtk.ImageNewFromAnimation(anim)
+	if err != nil {
+		log.Fatalf("ImageNewFromAnimation: %s\n", err.Error())
+	}
+	pbs = ProgressGifNew(gifImage, mainObjects.BoxMain, 1,
+		func() error {
+			glib.IdleAdd(func() {
+				mainObjects.MainButtonDone.SetSensitive(false)
+				mainObjects.GridOptions.SetSensitive(false)
+			})
+			doIt(show)
+			if show {
+				toTreview()
+			}
+			return nil
+		},
+		func() error {
+			mainObjects.MainButtonDone.SetSensitive(true)
+			mainObjects.GridOptions.SetSensitive(true)
+			SwitchExpandStateSet(mainObjects.SwitchExpand)
+			return nil
+		})
+
+	go func() {
+		pbs.StartGif()
+	}()
 }
 
 // doIt: do the job
 func doIt(display ...bool) {
 
 	var (
-		ok, dispOk bool = false, true
-		err        error
-		results,
+		dispOk bool = true
+		err    error
+		result *entry
+
 		filesToHash,
 		tmpFiles []string
 
 		infosHash, content string
 		fi                 os.FileInfo
 
-		// defer function.
-		attachAndExpand = func() {
-			tvs.StoreAttach()
-			SwitchExpandStateSet(mainObjects.SwitchExpand)
+		makeEntry = func(res *entry) (out string) {
+			if mainObjects.CheckbuttonShowFilename.GetActive() {
+				HRopt := HR_UNIT_DEFAULT
+				if mainObjects.CheckbuttonUseDecimal.GetActive() {
+					HRopt = HR_UNIT_DECIMAL
+				}
+				base := strings.Join([]string{"FILE:", res.base,
+					HumanReadableSize(res.size, HRopt)}, "\t")
+				out += strings.Join([]string{base, res.content, GetOsLineEnd()}, GetOsLineEnd())
+			} else {
+				out += res.content + GetOsLineEnd()
+			}
+			return
+		}
+		writeFile = func(f, c string) {
+			err = ioutil.WriteFile(ExtEnsure(f, ".SUM"), []byte(c), 0644)
+			Logger.Log(err, "doIt/WriteFile")
 		}
 	)
 
@@ -150,88 +213,260 @@ func doIt(display ...bool) {
 		dispOk = display[0]
 	}
 
-	// check for directories in list
+	if filesChanged {
+		// check for directories in list
+		for _, f := range files {
 
-	for _, f := range files {
+			if fi, err = os.Stat(f); err == nil {
+				if fi.IsDir() {
 
-		if fi, err = os.Stat(f); err == nil {
-			if fi.IsDir() {
+					// Scan directory
+					depth := 0
+					if mainObjects.CheckbuttonRecursiveScan.GetActive() {
+						depth = -1
+					}
+					if tmpFiles, err = ScanDirDepth(f, depth); err == nil {
+						for _, file := range tmpFiles {
 
-				// Scan directory not recursively
-				if tmpFiles, err = ScanDirDepth(f, 0); err == nil {
-					for _, file := range tmpFiles {
-
-						if !IsExistSl(filesToHash, file) {
-							filesToHash = append(filesToHash, file)
+							if !IsExistSl(filesToHash, file) {
+								filesToHash = append(filesToHash, file)
+							}
 						}
 					}
-				}
-				Logger.Log(err, "doIt/ScanDirDepth")
-			} else {
-				if !IsExistSl(filesToHash, f) {
-					filesToHash = append(filesToHash, f)
+					Logger.Log(err, "doIt/ScanDirDepth")
+				} else {
+					if !IsExistSl(filesToHash, f) {
+						filesToHash = append(filesToHash, f)
+					}
 				}
 			}
+			Logger.Log(err, "doIt/Stat")
 		}
-		Logger.Log(err, "doIt/Stat")
-	}
 
-	files = filesToHash
+		files = filesToHash
+		resultsHash = resultsHash[:0]
+		mainStatusbar.Set(fmt.Sprintf("%v", len(files)), 0)
+		mainStatusbar.Set(fmt.Sprintf("%v", 0), 1)
+		if mainObjects.CheckbuttonConcurrentOp.GetActive() {
+			ccs = ConcurrentCalcStrucNew(runtime.NumCPU(),
+				func(item interface{}) {
+					if result, err = makeHash(item.(string)); err == nil && len(result.outStr) > 0 {
+						result.content = strings.Join(result.outStr, GetOsLineEnd())
+						resultsHash = append(resultsHash, result)
+					}
+					Logger.Log(err, "doIt/makeHash")
+					glib.IdleAdd(func() {
+						mainStatusbar.Set(fmt.Sprintf("%v", ccs.Count), 1)
+					})
+				})
+			ccs.Run(ccs.StringSliceToIfaceSlice(files))
+			ccs.Wait()
 
-	// Prepare treeview for display
-	tvs.Clear()
-	tvs.StoreDetach()
-	defer attachAndExpand()
+			glib.IdleAdd(func() {
+				mainStatusbar.Set(fmt.Sprintf("%v", ccs.Count), 1)
+			})
 
-	for _, file := range files {
-		if results, err = makeHash(file); err == nil && len(results) > 0 {
-
-			content = strings.Join(results, GetOsLineEnd())
-			infosHash += content
-			ok = true
-
-			// Creation of .SUM file if needed
-			if mainObjects.CheckbuttonCreateFile.GetActive() {
-				if mainObjects.CheckbuttonAddReminder.GetActive() {
-					content += mainOptions.ReminderMessage
-				}
-				ioutil.WriteFile(ExtEnsure(file, ".SUM"), []byte(content), 0644)
-			}
-		}
-		Logger.Log(err, "doIt/makeHash/in")
-	}
-
-	if mainObjects.CheckbuttonAddReminder.GetActive() {
-		infosHash += mainOptions.ReminderMessage
-	}
-
-	if ok {
-
-		// Display to TextView
-		if dispOk {
-
-			Logger.Log(err, "doIt/TextViewDisplay.GetBuffer")
-			buff.SetText(infosHash)
-
-			// buff.ApplyTagByName("non-editable", buff.GetStartIter(), buff.GetEndIter())
-
+			sort.SliceStable(resultsHash, func(i, j int) bool {
+				return resultsHash[i].filename < resultsHash[j].filename
+			})
 		} else {
-
-			// To clipboard
-			clipboard.SetText(infosHash)
-
+			for idx, file := range files {
+				if result, err = makeHash(file); err == nil && len(result.outStr) > 0 {
+					result.content = strings.Join(result.outStr, GetOsLineEnd())
+					resultsHash = append(resultsHash, result)
+				}
+				glib.IdleAdd(func() {
+					mainStatusbar.Set(fmt.Sprintf("%v", idx+1), 1)
+				})
+			}
 		}
-
-		mainStatusbar.Set("Copied to clipboard", 1)
-	} else {
-		mainStatusbar.Set("Nothing was done", 1)
+		filesChanged = false
 	}
 
-	Logger.Log(err, "doIt/makeHash/out")
+	for _, res := range resultsHash {
+		// Computing results for display
+		infosHash += makeEntry(res)
+		// Creation of .SUM file if needed
+		if !dispOk {
+			content = makeEntry(res)
+			if mainObjects.CheckbuttonAddReminder.GetActive() {
+				content += mainOptions.ReminderMessage
+			}
+			if mainObjects.CheckbuttonCreateFile.GetActive() {
+				go writeFile(res.filename, content)
+			}
+		}
+	}
+	// Display to TextView
+	if dispOk {
+		glib.IdleAdd(func() {
+			buff.SetText(infosHash)
+		})
+	} else {
+		// To clipboard
+		glib.IdleAdd(func() {
+			clipboard.SetText(infosHash)
+		})
+		mainStatusbar.Set("Copied to clipboard", 1)
+	}
+	return
 }
 
-/* Experimental Transparent window TESTs */
+// func doIt(display ...bool) {
 
+// 	var (
+// 		dispOk bool = true
+// 		err    error
+// 		result *entry
+
+// 		wgIn  = new(sync.WaitGroup)
+// 		wgOut = new(sync.WaitGroup)
+
+// 		count, cpuCount, cpuNb int
+// 		filesToHash,
+// 		tmpFiles []string
+
+// 		infosHash, content string
+// 		fi                 os.FileInfo
+
+// 		makeEntry = func(res *entry) (out string) {
+// 			if mainObjects.CheckbuttonShowFilename.GetActive() {
+// 				HRopt := UNIT_DEFAULT
+// 				if mainObjects.CheckbuttonUseDecimal.GetActive() {
+// 					HRopt = UNIT_DECIMAL
+// 				}
+// 				base := strings.Join([]string{"FILE:", res.base,
+// 					HumanReadableSize(res.size, HRopt)}, "\t")
+// 				out += strings.Join([]string{base, res.content, GetOsLineEnd()}, GetOsLineEnd())
+// 			} else {
+// 				out += res.content + GetOsLineEnd()
+// 			}
+// 			return
+// 		}
+// 		writeFile = func(f, c string) {
+// 			err = ioutil.WriteFile(ExtEnsure(f, ".SUM"), []byte(c), 0644)
+// 			Logger.Log(err, "doIt/WriteFile")
+// 		}
+// 		calcHash = func(file string) {
+// 			if result, err = makeHash(file); err == nil && len(result.outStr) > 0 {
+// 				result.content = strings.Join(result.outStr, GetOsLineEnd())
+// 				resultsHash = append(resultsHash, result)
+// 			}
+// 			Logger.Log(err, "doIt/makeHash")
+// 			count++
+// 			glib.IdleAdd(func() {
+// 				mainStatusbar.Set(fmt.Sprintf("%v", count), 1)
+// 			})
+// 			if mainObjects.CheckbuttonConcurrentOp.GetActive() {
+// 				wgOut.Done()
+// 				wgIn.Done()
+// 			}
+// 		}
+// 	)
+
+// 	if len(display) > 0 {
+// 		dispOk = display[0]
+// 	}
+
+// 	if filesChanged {
+// 		// check for directories in list
+// 		for _, f := range files {
+
+// 			if fi, err = os.Stat(f); err == nil {
+// 				if fi.IsDir() {
+
+// 					// Scan directory not recursively
+// 					if tmpFiles, err = ScanDirDepth(f, 0); err == nil {
+// 						for _, file := range tmpFiles {
+
+// 							if !IsExistSl(filesToHash, file) {
+// 								filesToHash = append(filesToHash, file)
+// 							}
+// 						}
+// 					}
+// 					Logger.Log(err, "doIt/ScanDirDepth")
+// 				} else {
+// 					if !IsExistSl(filesToHash, f) {
+// 						filesToHash = append(filesToHash, f)
+// 					}
+// 				}
+// 			}
+// 			Logger.Log(err, "doIt/Stat")
+// 		}
+
+// 		files = filesToHash
+// 		resultsHash = resultsHash[:0]
+
+// 		if mainObjects.CheckbuttonConcurrentOp.GetActive() {
+// 			wgOut.Add(len(files))
+// 			cpuCount = runtime.NumCPU()
+// 			cpuNb = 1
+// 			wgIn.Add(cpuCount)
+// 		}
+// 		for _, file := range files {
+// 			if mainObjects.CheckbuttonConcurrentOp.GetActive() {
+// 				go calcHash(file)
+
+// 				if cpuNb == cpuCount {
+
+// 					wgIn.Wait()
+// 					if (len(files) - count) < cpuCount {
+// 						wgIn.Add(len(files) - count)
+// 					} else {
+// 						wgIn.Add(cpuCount)
+// 					}
+// 					cpuNb = 0
+// 				}
+// 				cpuNb++
+// 			} else {
+// 				calcHash(file)
+// 			}
+// 		}
+// 		if mainObjects.CheckbuttonConcurrentOp.GetActive() {
+// 			wgOut.Wait()
+// 		}
+// 		sort.SliceStable(resultsHash, func(i, j int) bool {
+// 			return resultsHash[i].filename < resultsHash[j].filename
+// 		})
+// 		filesChanged = false
+// 	}
+
+// 	for _, res := range resultsHash {
+
+// 		infosHash += makeEntry(res)
+// 		// Creation of .SUM file if needed
+// 		if !dispOk {
+// 			content = makeEntry(res)
+// 			if mainObjects.CheckbuttonAddReminder.GetActive() {
+// 				content += mainOptions.ReminderMessage
+// 			}
+// 			go writeFile(res.filename, content)
+// 		}
+// 	}
+// 	// if mainObjects.CheckbuttonAddReminder.GetActive() {
+// 	// 	infosHash += mainOptions.ReminderMessage
+// 	// }
+
+// 	// Display to TextView
+// 	if dispOk {
+// 		glib.IdleAdd(func() {
+// 			buff.SetText(infosHash)
+// 		})
+// 	} else {
+// 		// To clipboard
+// 		glib.IdleAdd(func() {
+// 			clipboard.SetText(infosHash)
+// 		})
+// 		mainStatusbar.Set("Copied to clipboard", 1)
+// 	}
+
+// 	/*else {
+// 		mainStatusbar.Set("Nothing was done", 1)
+// 	}*/
+// 	return
+// }
+
+/* Experimental Transparent window TESTs */
 var alphaSupported = false
 
 func Transparent(widget *gtk.Widget, alpha float64) {
@@ -273,49 +508,3 @@ func exposeDraw(wdgt *gtk.Widget, ctx *cairo.Context, alpha float64) {
 	ctx.SetOperator(cairo.OPERATOR_SOURCE)
 	ctx.Paint()
 }
-
-/*
-
-var alphaSupported = false
-
-func TransparentWindow(win *gtk.Window, alpha float64) {
-
-	// Needed for transparency
-	win.SetAppPaintable(true)
-
-	win.Connect("screen-changed", func(widget *gtk.Widget, oldScreen *gdk.Screen, userData ...interface{}) {
-		screenChanged(widget)
-	})
-	win.Connect("draw", func(window *gtk.Window, context *cairo.Context) {
-		exposeDraw(window, context, alpha)
-	})
-
-	screenChanged(&win.Widget)
-}
-
-func screenChanged(widget *gtk.Widget) {
-	screen, _ := widget.GetScreen()
-	visual, _ := screen.GetRGBAVisual()
-
-	if visual != nil {
-		alphaSupported = true
-	} else {
-		println("Alpha not supported")
-		alphaSupported = false
-	}
-
-	widget.SetVisual(visual)
-}
-
-func exposeDraw(w *gtk.Window, ctx *cairo.Context, alpha float64) {
-	if alphaSupported {
-		ctx.SetSourceRGBA(0.0, 0.0, 0.0, alpha)
-	} else {
-		ctx.SetSourceRGB(0.0, 0.0, 0.0)
-	}
-
-	ctx.SetOperator(cairo.OPERATOR_SOURCE)
-	ctx.Paint()
-}
-
-*/

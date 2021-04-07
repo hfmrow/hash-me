@@ -1,6 +1,6 @@
 // translate.go
 
-// File generated on Mon, 21 Dec 2020 18:50:49 using Gotk3 Objects Translate v1.5 2019-20 H.F.M
+// File generated on Wed, 07 Apr 2021 17:39:24 using Gotk3 Objects Translate v1.5 2019-20 H.F.M
 
 /*
 * 	This program comes with absolutely no warranty.
@@ -27,9 +27,11 @@ func (trans *MainTranslate) initGtkObjectsText() {
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonBlake2b256.Widget, "CheckbuttonBlake2b256")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonBlake2b384.Widget, "CheckbuttonBlake2b384")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonBlake2b512.Widget, "CheckbuttonBlake2b512")
+	trans.setTextToGtkObjects(&mainObjects.CheckbuttonConcurrentOp.Widget, "CheckbuttonConcurrentOp")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonCreateFile.Widget, "CheckbuttonCreateFile")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonMd4.Widget, "CheckbuttonMd4")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonMd5.Widget, "CheckbuttonMd5")
+	trans.setTextToGtkObjects(&mainObjects.CheckbuttonRecursiveScan.Widget, "CheckbuttonRecursiveScan")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonSha1.Widget, "CheckbuttonSha1")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonSha256.Widget, "CheckbuttonSha256")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonSha384.Widget, "CheckbuttonSha384")
@@ -38,7 +40,9 @@ func (trans *MainTranslate) initGtkObjectsText() {
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonSha3_384.Widget, "CheckbuttonSha3_384")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonSha3_512.Widget, "CheckbuttonSha3_512")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonShowFilename.Widget, "CheckbuttonShowFilename")
+	trans.setTextToGtkObjects(&mainObjects.CheckbuttonShowSplash.Widget, "CheckbuttonShowSplash")
 	trans.setTextToGtkObjects(&mainObjects.CheckbuttonUseDecimal.Widget, "CheckbuttonUseDecimal")
+	trans.setTextToGtkObjects(&mainObjects.ImageAppIcon.Widget, "ImageAppIcon")
 	trans.setTextToGtkObjects(&mainObjects.LabelMethods.Widget, "LabelMethods")
 	trans.setTextToGtkObjects(&mainObjects.LabelOptions.Widget, "LabelOptions")
 	trans.setTextToGtkObjects(&mainObjects.LabelOutput.Widget, "LabelOutput")
@@ -46,6 +50,7 @@ func (trans *MainTranslate) initGtkObjectsText() {
 	trans.setTextToGtkObjects(&mainObjects.MainButtonCancel.Widget, "MainButtonCancel")
 	trans.setTextToGtkObjects(&mainObjects.MainButtonDone.Widget, "MainButtonDone")
 	trans.setTextToGtkObjects(&mainObjects.MainStatusbar.Widget, "MainStatusbar")
+	trans.setTextToGtkObjects(&mainObjects.ScrolledWindowTextViewDisplay.Widget, "ScrolledWindowTextViewDisplay")
 	trans.setTextToGtkObjects(&mainObjects.SwitchExpand.Widget, "SwitchExpand")
 	trans.setTextToGtkObjects(&mainObjects.SwitchTreeView.Widget, "SwitchTreeView")
 	trans.setTextToGtkObjects(&mainObjects.TextViewDisplay.Widget, "TextViewDisplay")
@@ -59,11 +64,11 @@ var translate = new(MainTranslate)
 // They'll be added to language file each time application started
 // when "devMode" is set at true.
 var sts = map[string]string{
-	`cancel`: `Cancel`,
-	`dat`: `Data`,
 	`mtd`: `Hash method`,
 	`no`: `No`,
 	`yes`: `Yes`,
+	`cancel`: `Cancel`,
+	`dat`: `Data`,
 }
 
 

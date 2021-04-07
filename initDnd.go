@@ -16,41 +16,44 @@ func initDnds() {
 
 	// Main window
 	dndWindow = DragNDropNew(mainObjects.MainWindow, nil, func() {
-
+		var ok bool
 		filenames := *dndWindow.FilesList
+
 		if mainObjects.CheckbuttonAppendFiles.GetActive() {
 			for _, file := range filenames {
 
 				if !IsExistSl(files, file) {
+					ok = true
 					files = append(files, file)
 				}
 			}
 		} else {
+			ok = true
 			files = filenames
 		}
 
-		toDisplay()
-
-		updateStatusbar()
+		filesChanged = ok
+		toDisplay(true)
 	})
 
 	// TextView (don't know why, it override the main window DnD ...)
 	dndTextView = DragNDropNew(mainObjects.TextViewDisplay, nil, func() {
-
+		var ok bool
 		filenames := *dndTextView.FilesList
+
 		if mainObjects.CheckbuttonAppendFiles.GetActive() {
 			for _, file := range filenames {
 
 				if !IsExistSl(files, file) {
+					ok = true
 					files = append(files, file)
 				}
 			}
 		} else {
+			ok = true
 			files = filenames
 		}
-
-		toDisplay()
-
-		updateStatusbar()
+		filesChanged = ok
+		toDisplay(true)
 	})
 }
