@@ -1,4 +1,4 @@
-# Hash Me (gui & cli versions)
+# Hash Me 1.2 (gui & cli versions)
 
 *Calculate the checksum using many methods for one or more files at a time. Save the results in a '.SUM' text file for each given file.*
 
